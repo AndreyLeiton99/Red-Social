@@ -1,5 +1,3 @@
-from Persona import Persona
-
 
 class Nodo:
 
@@ -66,20 +64,3 @@ class Grafo:
 
             ptr = ptr.sgte
             print("")
-
-
-
-
-'''
-grafo = Grafo()
-print(grafo.cabeza)
-grafo.cabeza = Nodo()
-print(grafo.cabeza)
-'''
-
-grafo = Grafo()
-persona = Persona("Andrey", "Soltero", "El Roble")
-grafo.insertar_nodo(grafo, persona)
-
-grafo.mostrar_grafo(grafo)
-

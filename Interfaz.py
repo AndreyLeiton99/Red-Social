@@ -13,11 +13,11 @@ class Persona:
                f"[Dirección].........................{self.direccion}\n"
 
     def showComments(self):
-        cadena = f'\n<< Comentarios de "{self.nombre}" >>\n\n'
+        cadena = f'\n<< Comentarios de {self.nombre} >>\n\n'
 
         aux = self.comentarios.copy()  # si se quita el .copy() vacia directamente la lista de comentarios
         if len(aux) == 0:
-            cadena += f'El usuario "{self.nombre}" no ha publicado comentarios.\n'
+            cadena += f'El usuario {self.nombre} no ha publicado comentarios.\n'
         else:
             for i in range(len(aux)):
                 cadena += f"-> {aux[-1]} \n"
@@ -57,14 +57,15 @@ class Nodo:
         for i in self.amigos:
             if i.nombre == name:
                 added = True
+                break
         return added
 
     def agregaAmigo(self, v):
         if self.buscarAmigo(v.nombre):
-            print("¡Ustedes ya son amigos! :)")
+            return False
         else:
             self.amigos.append(v)
-            print("Amigo agregado.")
+            return True
 
     def mostrarAmigosNodo(self,opc):
         lista = []
@@ -83,6 +84,7 @@ class Nodo:
         for i in self.amigos:
             print(f'Ultimo comentario del usuario "{i.nombre}"\n'
                   f'❦ {i.sacaComentario()}\n')
+
 
 class Grafo:
     def __init__(self):
@@ -139,7 +141,6 @@ class Grafo:
                     self.nodo[user].mostrarAmigosNodo('1')
                     break
         elif opc == '2':
-            #for i in self.nodo[user].mostrarAmigosNodo('2'):
             lista = self.nodo[user].mostrarAmigosNodo('2')
             return lista
         elif opc == '3':
@@ -149,8 +150,10 @@ class Grafo:
 
     def agregaArista(self, nodo1, nodo2):
         if self.buscarNodo(nodo1.nombre) and self.buscarNodo(nodo2.nombre):
-            self.nodo[nodo1].agregaAmigo(nodo2)
-            self.nodo[nodo2].agregaAmigo(nodo1)
+            if self.nodo[nodo1].agregaAmigo(nodo2) and self.nodo[nodo2].agregaAmigo(nodo1):
+                print("Amigo agregado.")
+            else:
+                print("¡Ustedes ya son amigos! :)")
         else:
             if not self.buscarNodo(nodo1.nombre) and not self.buscarNodo(nodo2.nombre):
                 print(f"-------Estos usuarios no existen-------")
@@ -165,9 +168,8 @@ class Grafo:
     def mostrarSugerencias(self, user):
         aux = []
         for i in self.nodo:
-            if i.nombre == (user):
-                #print(f'entro con {user}')
-                aux = self.mostrarAmigos(i,'2')
+            if i.nombre == user:
+                aux = self.mostrarAmigos(i, '2')
         return aux
 
     def filtraSugerencias(self, user, lista1, lista2):
@@ -179,6 +181,7 @@ class Grafo:
         else:
             return 'No hay sugerencias de amigos, lo sentimos \n' \
                    '                  :( '
+
 
 def pause():
     print("\nPresione ENTER para continuar...", end="")
@@ -244,7 +247,7 @@ def menu():
                             print("\nDigite el nombre de usuario que desea buscar: ")
                             username = input()
                             if username == user.nombre:
-                                print("Buen intento, pero el usuario ya esxiste") #este compa le sabe XD
+                                print("Buen intento, pero el usuario ya existe")
                             else:
                                 if grafo.buscarNodo(username):
                                     print("-------Usuario encontrado-------\n")
@@ -258,7 +261,7 @@ def menu():
                                     print("-------Usuario no encontrado-------")
 
                         elif opc == "2":
-                            print('\n-----Sugerencia de Amgios-----')
+                            print('\n-----Sugerencia de Amigos-----')
                             aux = []
                             lista = []
                             listaFinal = []
@@ -270,8 +273,11 @@ def menu():
                             listaFinal = grafo.filtraSugerencias(user, lista, aux)
 
                             for i in listaFinal:
-                                print(f'{contador}. {i}')
-                                contador += 1
+                                if i == user.nombre:
+                                    continue
+                                else:
+                                    print(f'{contador}. {i}')
+                                    contador += 1
 
                         elif opc != "1" and opc != "2" and opc != "3":
                             print("-------¡Opción inválida!-------")
@@ -304,11 +310,7 @@ def menu():
                               '\n------------------------------\n')
                         lista = []
                         contador = 1
-                        #aux = grafo.mostrarAmigos(user, '2')
                         grafo.mostrarAmigos(user, '3')
-                        '''for i in lista:
-                            print(f'{contador}. {i}')'''
-
                         pause()
                     elif op == "6":
                         print("\nCerrando sesión...")
