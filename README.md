@@ -6,7 +6,7 @@ La estructura del menú se puede ver algo así:
 
     1.1) Le pide los datos solicitados y crea el usuario
   
-2- Ingresar (Valida si el usuario existe?)
+2- Ingresar (Valida si el usuario existe)
 
 	  2.1) Datos personales -> mostrar o actualizar su información 
   
